@@ -1,0 +1,48 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/other_bg">
+
+
+
+    <View
+        android:layout_marginTop="@dimen/side_top"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/splite_line" />
+
+    <ListView
+        android:id="@+id/lv_device_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@color/splite_line"
+        android:dividerHeight="1px" >
+    </ListView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/splite_line" />
+
+    <Button
+        android:id="@+id/btn_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="3dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginTop="@dimen/side_top"
+        android:layout_marginEnd="3dp"
+        android:layout_marginRight="3dp"
+        android:text="Refresh"/>
+
+    <Button
+        android:id="@+id/btn_audio_wave_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="3dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginTop="@dimen/side_top"
+        android:layout_marginEnd="3dp"
+        android:layout_marginRight="3dp"
+        android:text="audioWaveAdd"/>
+</LinearLayout>

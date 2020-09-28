@@ -1,0 +1,22 @@
+<resources>
+
+    <!-- ui规范化后的单位值  start-->
+
+    <dimen name="navigate_height">48dp</dimen><!-- 顶部导航栏高度 -->
+    <dimen name="height_button">40dp</dimen><!-- 按钮高 -->
+    <dimen name="listitem_height">48dp</dimen><!-- 列表高 -->
+    <dimen name="gap_section">15dp</dimen><!-- 段间距 -->
+    <dimen name="gap_row">10dp</dimen><!-- 普通行间距 -->
+
+    <dimen name="side_left">15dp</dimen><!-- 左侧边距 -->
+    <dimen name="side_right">15dp</dimen><!-- 右侧边距 -->
+    <dimen name="side_top">15dp</dimen><!-- 顶部边距 -->
+    <dimen name="side_bottom">15dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
+    <dimen name="fab_margin">16dp</dimen><!-- 顶部边距 -->
+
+</resources>

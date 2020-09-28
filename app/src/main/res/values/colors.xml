@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="other_bg">#f2f2f6</color><!--设置等其他界面背景 -->
+    <!-- 线条颜色 -->
+    <color name="splite_line">#d2d2d2</color><!-- 分割线颜色 -->
+    <color name="tint_bg_text">#51585b</color><!-- 浅色背景上主要文字颜色 -->
+    <color name="navigate_bg">#1b1b23</color><!--顶部状态栏背景颜色 -->
+    <color name="text_white">#ffffff</color> <!-- 顶部条纹颜色 -->
+    <color name="item_press_bg">#e8e8e9</color><!-- 列表行按下去的背景颜色-->
+</resources>

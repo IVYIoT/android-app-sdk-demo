@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: :ipclibrary-debug_v1.1:@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/ipclibrary-debug_v1.1.aar/36699f4029a412f8b5a3c79f9f251b01/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/ipclibrary-debug_v1.1.aar/36699f4029a412f8b5a3c79f9f251b01/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/ipclibrary-debug_v1.1.aar/36699f4029a412f8b5a3c79f9f251b01/jars/libs/FosCryptJni.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/ipclibrary-debug_v1.1.aar/36699f4029a412f8b5a3c79f9f251b01/jars/libs/iCryptoJni.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/ipclibrary-debug_v1.1.aar/36699f4029a412f8b5a3c79f9f251b01/jars/libs/IvyCryptoJni.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/ipclibrary-debug_v1.1.aar/36699f4029a412f8b5a3c79f9f251b01/jars/libs/IvyIoSdkJni.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
