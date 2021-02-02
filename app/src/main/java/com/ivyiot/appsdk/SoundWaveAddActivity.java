@@ -4,17 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.ivyiot.appsdk.adapter.DeviceSearchAdapter;
 import com.ivyiot.ipclibrary.model.DiscoveryDev;
 import com.ivyiot.ipclibrary.sdk.SDKManager;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,7 +77,6 @@ public class SoundWaveAddActivity extends AppCompatActivity implements View.OnCl
                     SDKManager.getInstance().startSoundWaveAdd(uid, wifi_ssid, wifi_password, 1);
                     mainThread.post(searchWlanDeviceRunable);
                 }
-                mainThread.post(searchWlanDeviceRunable);
                 break;
         }
     }

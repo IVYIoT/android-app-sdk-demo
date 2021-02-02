@@ -1,23 +1,29 @@
 package com.ivyiot.appsdk;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import android.os.Environment;
+import android.os.Message;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.ivyiot.ipclibrary.model.IvyCamera;
 import com.ivyiot.ipclibrary.model.PlaybackRecordInfo;
+import com.ivyiot.ipclibrary.model.PlaybackRecordListInfoArgsType1;
 import com.ivyiot.ipclibrary.sdk.ISdkCallback;
 import com.ivyiot.ipclibrary.video.IPBVideoListener;
 import com.ivyiot.ipclibrary.video.PBVideoSurfaceView;
-
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Observable;
+import java.util.Observer;
 
-public class PlaybackActivity extends AppCompatActivity implements View.OnClickListener, IPBVideoListener {
+public class PlaybackActivity extends AppCompatActivity implements Observer,View.OnClickListener,IPBVideoListener {
     private final String TAG = "MainActivity";
     private PBVideoSurfaceView pbvideoview;
     private IvyCamera camera;
@@ -26,6 +32,8 @@ public class PlaybackActivity extends AppCompatActivity implements View.OnClickL
     private ArrayList<String> recordArr;
     /** 回放列表 */
     private ArrayList<PlaybackRecordInfo> recordIvyArr;
+
+    private TextView tv_playback_buffer;
 
 
     @Override
@@ -45,7 +53,15 @@ public class PlaybackActivity extends AppCompatActivity implements View.OnClickL
         findViewById(R.id.btn_pb_pause).setOnClickListener(this);
         findViewById(R.id.btn_pb_resume).setOnClickListener(this);
         findViewById(R.id.btn_pb_seek).setOnClickListener(this);
+        findViewById(R.id.btn_pb_audio_open).setOnClickListener(this);
+        findViewById(R.id.btn_pb_audio_close).setOnClickListener(this);
+
+
+
+        tv_playback_buffer = findViewById(R.id.tv_playback_buffer);
+        camera.addObserver(PlaybackActivity.this);
     }
+
 
 
     @Override
@@ -59,10 +75,10 @@ public class PlaybackActivity extends AppCompatActivity implements View.OnClickL
                 //注意：Calendar类的月份从0开始。
                 Calendar cal = Calendar.getInstance();
                 //2019.9.23 00:00:00
-                cal.set(2020, 8, 25, 0, 0, 0);
+                cal.set(2021, 0, 13, 0, 0, 0);
                 int todayStart = (int) (cal.getTimeInMillis() / 1000);
                 //2019.9.23 23:59:59
-                cal.set(2020, 8, 25, 23, 59, 59);
+                cal.set(2021, 0, 13, 23, 59, 59);
                 int todayEnd = (int) (cal.getTimeInMillis() / 1000);
                 camera.getPBList(todayStart, todayEnd, 2, new ISdkCallback<ArrayList<PlaybackRecordInfo>>() {
                     @Override
@@ -95,7 +111,13 @@ public class PlaybackActivity extends AppCompatActivity implements View.OnClickL
                 pbvideoview.resumePBVideo();
                 break;
             case R.id.btn_pb_seek:
-                pbvideoview.seekPBVideo(0);
+
+                break;
+            case R.id.btn_pb_audio_open:
+                pbvideoview.openPBAudio();
+                break;
+            case R.id.btn_pb_audio_close:
+                pbvideoview.closePBAudio();
                 break;
         }
     }
@@ -152,8 +174,25 @@ public class PlaybackActivity extends AppCompatActivity implements View.OnClickL
     }
 
     @Override
+    public void onPlayLoadProgress(int progress) {
+        Log.e(TAG, "onPlayLoadProgress: " + progress);
+        tv_playback_buffer.setText("当前缓冲进度："+progress +" %");
+
+    }
+
+    @Override
     public void onPlayStart() {
         Log.e(TAG, "onPlayStart: ");
+    }
+
+    @Override
+    public void onPlayComplete() {
+        pbvideoview.closePBVideo();
+        Log.e(TAG, "onPlayComplete: ");
+    }
+
+    @Override
+    public void onPlaying(int progress) {//正在播放
     }
 
     @Override
@@ -167,4 +206,17 @@ public class PlaybackActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
+    @Override
+    protected void onStop() {
+        //pbvideoview.closePBVideo();
+        super.onStop();
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (arg != null) {
+            Message msg = (Message) arg;
+            Log.e(TAG, "update: " + msg.what + ";data=" + msg.obj);
+        }
+    }
 }

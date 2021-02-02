@@ -90,6 +90,44 @@
                     android:text="指定时间戳播放" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp">
+
+                <Button
+                    android:id="@+id/btn_pb_audio_open"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginEnd="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="1"
+                    android:text="音频打开" />
+
+                <Button
+                    android:id="@+id/btn_pb_audio_close"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginEnd="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="1"
+                    android:text="音频关闭" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_playback_buffer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap_row"
+                android:gravity="center"
+                android:textSize="15sp"
+                />
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

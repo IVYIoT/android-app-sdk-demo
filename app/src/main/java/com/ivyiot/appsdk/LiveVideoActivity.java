@@ -6,14 +6,18 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.ivyio.sdk.PictureFile;
+import com.ivyio.sdk.PictureInfo;
+import com.ivyio.sdk.PictureListType0;
 import com.ivyiot.ipclibrary.audio.AudioThread;
 import com.ivyiot.ipclibrary.audio.TalkThread;
 import com.ivyiot.ipclibrary.common.Global;
@@ -38,6 +42,7 @@ import com.ivyiot.ipclibrary.util.PermissionUtil;
 import com.ivyiot.ipclibrary.video.IVideoListener;
 import com.ivyiot.ipclibrary.video.VideoSurfaceView;
 
+import java.util.Calendar;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -90,7 +95,7 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
     /**
      * 当前清晰度选项
      */
-    private EDefinitionItem definitionItem;
+    private EDefinitionItem.EResolutionMode[] definitionItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,6 +166,14 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
         findViewById(R.id.btn_sdcard_format).setOnClickListener(this);
         findViewById(R.id.btn_get_sdcard_info).setOnClickListener(this);
 
+
+        findViewById(R.id.btn_sleep).setOnClickListener(this);
+        findViewById(R.id.btn_wakeup).setOnClickListener(this);
+        findViewById(R.id.btn_reboot).setOnClickListener(this);
+        findViewById(R.id.btn_wdr).setOnClickListener(this);
+
+        findViewById(R.id.btn_get_picture_list).setOnClickListener(this);
+        findViewById(R.id.btn_picture_download).setOnClickListener(this);
     }
 
     @Override
@@ -290,7 +303,6 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
                         }
                     });
                 }
-
                 break;
             case R.id.btn_close_talk://关闭对讲
                 camera.closeTalk(new ISdkCallback() {
@@ -383,13 +395,12 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
                     Toast.makeText(LiveVideoActivity.this, "先获取清晰度集合", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                final boolean streamMode = definitionItem.getLength() == 2 && !CommonUtil.is313EPlatform(devAbility);
+                final boolean streamMode = definitionItem.length == 2 && !CommonUtil.is313EPlatform(devAbility);
                 if (streamMode) {//主/子码流切换
-                    //changeStream(definitionItem.getResolution(definitionItem.getCurrRules()[1]));
                     changeStream(1);
                 } else {//三档切换
                     //camera.changeDefinition(definitionItem.getResolution(definitionItem.getCurrRules()[0]), null);
-                    camera.changeDefinition(2, null);
+                    camera.changeDefinition(0, null);
                 }
 
                 break;
@@ -620,9 +631,135 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
                     }
                 });
                 break;
+            case R.id.btn_sleep:
+                camera.deviceSleep(new ISdkCallback<DevSDInfo>() {
+                    @Override
+                    public void onSuccess(DevSDInfo result) {
+
+                    }
+
+                    @Override
+                    public void onError(int errorCode) {
+
+                    }
+
+                    @Override
+                    public void onLoginError(int errorCode) {
+
+                    }
+                });
+
+                break;
+            case R.id.btn_wakeup:
+                camera.deviceWakeUp(new ISdkCallback() {
+                    @Override
+                    public void onSuccess(Object result) {
+
+                    }
+
+                    @Override
+                    public void onError(int errorCode) {
+
+                    }
+
+                    @Override
+                    public void onLoginError(int errorCode) {
+
+                    }
+                });
+
+                break;
+            case R.id.btn_reboot:
+                camera.rebootDevice(new ISdkCallback() {
+                    @Override
+                    public void onSuccess(Object result) {
+
+                    }
+
+                    @Override
+                    public void onError(int errorCode) {
+
+                    }
+
+                    @Override
+                    public void onLoginError(int errorCode) {
+
+                    }
+                });
+
+                break;
+            case R.id.btn_wdr:
+                camera.setWDRMode(true, new ISdkCallback() {
+                    @Override
+                    public void onSuccess(Object result) {
+
+                    }
+
+                    @Override
+                    public void onError(int errorCode) {
+
+                    }
+
+                    @Override
+                    public void onLoginError(int errorCode) {
+
+                    }
+                });
+
+                break;
+            case R.id.btn_get_picture_list:
+                //注意：Calendar类的月份从0开始。
+                Calendar cal = Calendar.getInstance();
+                //2019.9.23 00:00:00
+                cal.set(2020, 11, 29, 0, 0, 0);
+                int todayStart = (int) (cal.getTimeInMillis() / 1000);
+                //2019.9.23 23:59:59
+                cal.set(2020, 11, 29, 23, 59, 59);
+                int todayEnd = (int) (cal.getTimeInMillis() / 1000);
+                camera.getPictureList(todayStart, todayEnd, 511, 0, new ISdkCallback<PictureListType0>() {
+                    @Override
+                    public void onSuccess(PictureListType0 result) {
+
+                    }
+
+                    @Override
+                    public void onError(int errorCode) {
+
+                    }
+
+                    @Override
+                    public void onLoginError(int errorCode) {
+
+                    }
+                });
+                break;
+            case R.id.btn_picture_download:
+                PictureInfo pictureInfo = new PictureInfo();
+                pictureInfo.format = 0;
+                pictureInfo.time = 0;
+                pictureInfo.type = 0;
+                camera.downloadPictureFile(pictureInfo, new ISdkCallback<PictureFile>() {
+                    @Override
+                    public void onSuccess(PictureFile result) {
+
+                    }
+
+                    @Override
+                    public void onError(int errorCode) {
+
+                    }
+
+                    @Override
+                    public void onLoginError(int errorCode) {
+
+                    }
+                });
+                break;
 
         }
     }
+
+
 
     //将手机时间同步到IPC
     private void syncTime() {
@@ -660,8 +797,9 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
     }
 
     @Override
-    public void firstFrameDone(byte[] rgb) {
-        Log.e(TAG, "firstFrameDone: " + (rgb == null ? "null" : rgb.length));
+    public void firstFrameDone(Bitmap rgb) {
+
+        Log.e(TAG, "firstFrameDone: " + (rgb == null ? "null" : rgb.toString()));
     }
 
     @Override
@@ -724,6 +862,9 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
         if (null != videoview) {
             videoview.closeVideo();
         }
+        if(null != camera){
+            camera.deleteObserver(this);
+        }
 
     }
 
@@ -754,5 +895,9 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
 
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        camera.destroy();
+    }
 }
