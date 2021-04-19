@@ -199,7 +199,7 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
                     public void run() {
                         int result = camera.login();
                         Log.e(TAG, "login: " + result);
-                        //getDoorSensorInfo();
+                        getDoorSensorInfo();
                     }
                 });
 
@@ -334,6 +334,7 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
                             Log.e(TAG, "getDevInfo onSuccess. uid= " + result.uid + " ,mac= " + result.mac);
                             devInfo = result;
                             Toast.makeText(LiveVideoActivity.this, "getDevInfo success. ipc name=" + result.devName, Toast.LENGTH_SHORT).show();
+
                         }
 
                         @Override
@@ -785,7 +786,7 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
         Global.es.execute(new Runnable() {
             @Override
             public void run() {
-                SDKResponse response = CmdHelper.sendCGI(camera.getHandle(), "cmd=getDoorSensorInfo");
+                SDKResponse response = CmdHelper.sendCGICommand(camera.getHandle(), "cmd=getDevInfo");
                 Log.e(TAG, response.result + ", " + response.json);
             }
         });

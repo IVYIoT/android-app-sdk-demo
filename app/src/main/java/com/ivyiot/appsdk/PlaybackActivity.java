@@ -185,11 +185,6 @@ public class PlaybackActivity extends AppCompatActivity implements Observer,View
         Log.e(TAG, "onPlayStart: ");
     }
 
-    @Override
-    public void onPlayComplete() {
-        pbvideoview.closePBVideo();
-        Log.e(TAG, "onPlayComplete: ");
-    }
 
     @Override
     public void onPlaying(int progress) {//正在播放
