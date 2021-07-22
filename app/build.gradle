@@ -32,5 +32,5 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation(name: 'ipclibrary-debug_v1.1', ext: 'aar')
+    implementation(name: 'ipclibrary-2021_06_07', ext: 'aar')
 }

@@ -762,6 +762,7 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
 
 
 
+
     //将手机时间同步到IPC
     private void syncTime() {
         camera.syncSystemTime(new ISdkCallback<DevSystemTime>() {
@@ -779,7 +780,7 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
             public void onLoginError(int errorCode) {
                 Log.e(TAG, "syncSystemTime onLoginError:" + errorCode);
             }
-        }, LiveVideoActivity.this);
+        });
     }
 
     private void getDoorSensorInfo() {
