@@ -55,6 +55,7 @@ public class PlaybackActivity extends AppCompatActivity implements Observer,View
         findViewById(R.id.btn_pb_seek).setOnClickListener(this);
         findViewById(R.id.btn_pb_audio_open).setOnClickListener(this);
         findViewById(R.id.btn_pb_audio_close).setOnClickListener(this);
+        findViewById(R.id.btn_pb_download).setOnClickListener(this);
 
 
 
@@ -63,7 +64,7 @@ public class PlaybackActivity extends AppCompatActivity implements Observer,View
     }
 
 
-
+    int seekPosition = 60;
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -75,10 +76,10 @@ public class PlaybackActivity extends AppCompatActivity implements Observer,View
                 //注意：Calendar类的月份从0开始。
                 Calendar cal = Calendar.getInstance();
                 //2019.9.23 00:00:00
-                cal.set(2021, 0, 13, 0, 0, 0);
+                cal.set(2021, 6, 21, 0, 0, 0);
                 int todayStart = (int) (cal.getTimeInMillis() / 1000);
                 //2019.9.23 23:59:59
-                cal.set(2021, 0, 13, 23, 59, 59);
+                cal.set(2021, 6, 21, 23, 59, 59);
                 int todayEnd = (int) (cal.getTimeInMillis() / 1000);
                 camera.getPBList(todayStart, todayEnd, 2, new ISdkCallback<ArrayList<PlaybackRecordInfo>>() {
                     @Override
@@ -101,7 +102,7 @@ public class PlaybackActivity extends AppCompatActivity implements Observer,View
             case R.id.btn_pbvideo:
                 pbvideoview.setVisibility(View.VISIBLE);
                 if (recordIvyArr != null && recordIvyArr.size() > 0) {
-                    pbvideoview.openPBVideo(camera, recordIvyArr.get(0), PlaybackActivity.this);
+                    pbvideoview.openPBVideo(camera, recordIvyArr.get(1), PlaybackActivity.this);
                 }
                 break;
             case R.id.btn_pb_pause:
@@ -111,13 +112,32 @@ public class PlaybackActivity extends AppCompatActivity implements Observer,View
                 pbvideoview.resumePBVideo();
                 break;
             case R.id.btn_pb_seek:
-
+                seekPosition += 20;
+                pbvideoview.seekPBVideo(seekPosition);
                 break;
             case R.id.btn_pb_audio_open:
                 pbvideoview.openPBAudio();
                 break;
             case R.id.btn_pb_audio_close:
                 pbvideoview.closePBAudio();
+                break;
+            case R.id.btn_pb_download:
+                camera.downloadSDCardRecord(recordIvyArr.get(1), Environment.getExternalStorageDirectory() + "/456.MP4", new ISdkCallback() {
+                    @Override
+                    public void onSuccess(Object o) {
+
+                    }
+
+                    @Override
+                    public void onError(int i) {
+
+                    }
+
+                    @Override
+                    public void onLoginError(int i) {
+
+                    }
+                });
                 break;
         }
     }
