@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ivyio.sdk.PictureFile;
 import com.ivyio.sdk.PictureInfo;
+import com.ivyio.sdk.PictureList;
 import com.ivyio.sdk.PictureListType0;
 import com.ivyiot.ipclibrary.audio.AudioThread;
 import com.ivyiot.ipclibrary.audio.TalkThread;
@@ -32,6 +33,7 @@ import com.ivyiot.ipclibrary.model.ECameraPlatform;
 import com.ivyiot.ipclibrary.model.EDefinitionItem;
 import com.ivyiot.ipclibrary.model.IvyCamera;
 import com.ivyiot.ipclibrary.model.PTZCmd;
+import com.ivyiot.ipclibrary.model.PictureDetail;
 import com.ivyiot.ipclibrary.model.ResetPointList;
 import com.ivyiot.ipclibrary.model.StreamMode;
 import com.ivyiot.ipclibrary.sdk.CmdHelper;
@@ -717,9 +719,10 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
                 //2019.9.23 23:59:59
                 cal.set(2020, 11, 29, 23, 59, 59);
                 int todayEnd = (int) (cal.getTimeInMillis() / 1000);
-                camera.getPictureList(todayStart, todayEnd, 511, 0, new ISdkCallback<PictureListType0>() {
+                camera.getPictureList(todayStart, todayEnd, 511, 0, new ISdkCallback<PictureList>() {
+
                     @Override
-                    public void onSuccess(PictureListType0 result) {
+                    public void onSuccess(PictureList pictureList) {
 
                     }
 
@@ -735,7 +738,7 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
                 });
                 break;
             case R.id.btn_picture_download:
-                PictureInfo pictureInfo = new PictureInfo();
+                PictureDetail pictureInfo = new PictureDetail();
                 pictureInfo.format = 0;
                 pictureInfo.time = 0;
                 pictureInfo.type = 0;
@@ -822,6 +825,11 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
     @Override
     public void closeVideoFail(int errorCode) {
 
+    }
+
+    @Override
+    public void netFlowSpeedRefresh(String s) {
+        
     }
 
 
