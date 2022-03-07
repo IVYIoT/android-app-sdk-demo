@@ -3,6 +3,7 @@ package com.ivyiot.appsdk;
 import android.app.Application;
 import android.util.Log;
 
+import com.ivyio.sdk.LogLevel;
 import com.ivyiot.ipclibrary.sdk.SDKManager;
 
 import java.util.HashMap;
@@ -32,8 +33,8 @@ public class IvyApplication extends Application {
         super.onCreate();
         instance = this;
         cache = new HashMap<>();
-        SDKManager.getInstance().setLog("");//在init之前调用
-        SDKManager.getInstance().init();
+        SDKManager.getInstance().setLog("", LogLevel.NO);//在init之前调用
+        SDKManager.getInstance().init(instance);
 
         String sdkVersion = SDKManager.getInstance().getSdkVersion();
         Log.e(TAG, "sdk version:" + sdkVersion);

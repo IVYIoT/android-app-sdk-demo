@@ -235,15 +235,30 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
                 break;
             case R.id.btn_snap:
                 //抓拍
-                Bitmap bitmap = videoview.snap(true);
-                Log.e(TAG, "onClick: " + (bitmap == null ? "null" : (bitmap.getWidth() + ":" + bitmap.getHeight())));
+                videoview.snap(true, "", new ISdkCallback() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        Log.e(TAG, "onClick: snap" );
+                    }
+
+                    @Override
+                    public void onError(int i) {
+
+                    }
+
+                    @Override
+                    public void onLoginError(int i) {
+
+                    }
+                });
+
                 break;
             case R.id.btn_open_audio://打开监听
                 camera.openAudio(new ISdkCallback() {
                     @Override
                     public void onSuccess(Object result) {
                         if (null == audioThread) {
-                            audioThread = new AudioThread(camera);
+                            audioThread = new AudioThread(camera,true);
                             audioThread.startAudio();
                             audioThread.start();
                         }
@@ -287,7 +302,7 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
                         @Override
                         public void onSuccess(Object result) {
                             if (null == talkThread) {
-                                talkThread = new TalkThread(camera);
+                                talkThread = new TalkThread(camera, true);
                                 talkThread.startTalk();
                                 talkThread.start();
 
@@ -383,7 +398,7 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
                     Toast.makeText(LiveVideoActivity.this, "先获取设备能力集", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                definitionItem = camera.getDefinitionItems(devAbility, devInfo.sensorType);
+                definitionItem = camera.getDefinitionItems(devAbility, devInfo);
                 break;
             case R.id.btn_set_definition://设置清晰度
                 if (null == devInfo) {
@@ -841,7 +856,7 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
                     @Override
                     public void onSuccess(Object result) {
                         if (null == talkThread) {
-                            talkThread = new TalkThread(camera);
+                            talkThread = new TalkThread(camera, true);
                             talkThread.startTalk();
                             talkThread.start();
 
