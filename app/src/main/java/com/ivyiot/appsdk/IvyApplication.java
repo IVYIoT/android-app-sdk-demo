@@ -33,7 +33,8 @@ public class IvyApplication extends Application {
         super.onCreate();
         instance = this;
         cache = new HashMap<>();
-        SDKManager.getInstance().setLog("", LogLevel.NO);//在init之前调用
+        SDKManager.getInstance().initIvySDKLog("", LogLevel.NO);//在init之前调用
+        SDKManager.getInstance().initIvyAppLog("", false);//在init之前调用
         SDKManager.getInstance().init(instance);
 
         String sdkVersion = SDKManager.getInstance().getSdkVersion();
