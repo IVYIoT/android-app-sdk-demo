@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".LiveVideoActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/live_video_frame_nvr_1"
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:layout_weight="1">
+
+            <com.ivyiot.ipclibrary.video.VideoSurfaceViewNVR
+                android:id="@+id/live_surface_view_nvr_1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center" />
+
+
+            <TextView
+                android:id="@+id/tv_nvr_live_play_channel_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|left"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="4dp"
+                android:textColor="@color/text_white"
+                android:textSize="14sp" />
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:id="@+id/live_video_frame_nvr_2"
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:layout_marginLeft="@dimen/gap_row"
+            android:layout_weight="1">
+
+            <com.ivyiot.ipclibrary.video.VideoSurfaceViewNVR
+                android:id="@+id/live_surface_view_nvr_2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center" />
+
+
+            <TextView
+                android:id="@+id/tv_nvr_live_play_channel_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|left"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="4dp"
+                android:textColor="@color/text_white"
+                android:textSize="14sp" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/gap_row"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/live_video_frame_nvr_3"
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:layout_weight="1">
+
+            <com.ivyiot.ipclibrary.video.VideoSurfaceViewNVR
+                android:id="@+id/live_surface_view_nvr_3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center" />
+
+
+            <TextView
+                android:id="@+id/tv_nvr_live_play_channel_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|left"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="4dp"
+                android:textColor="@color/text_white"
+                android:textSize="14sp" />
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:id="@+id/live_video_frame_nvr_4"
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:layout_marginLeft="@dimen/gap_row"
+            android:layout_weight="1">
+
+            <com.ivyiot.ipclibrary.video.VideoSurfaceViewNVR
+                android:id="@+id/live_surface_view_nvr_4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center" />
+
+
+            <TextView
+                android:id="@+id/tv_nvr_live_play_channel_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|left"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="4dp"
+                android:textColor="@color/text_white"
+                android:textSize="14sp" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp">
+
+        <Button
+            android:id="@+id/btn_open_nvr_1"
+            android:layout_width="0.0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:text="打开通道1" />
+
+        <Button
+            android:id="@+id/btn_close_nvr_1"
+            android:layout_width="0.0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:text="关闭通道1" />
+
+        <Button
+            android:id="@+id/btn_snap_nvr_1"
+            android:layout_width="0.0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:text="抓拍通道1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp">
+
+        <Button
+            android:id="@+id/btn_nvr_start_record"
+            android:layout_width="0.0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:text="通道1开始录像" />
+
+        <Button
+            android:id="@+id/btn_nvr_stop_record"
+            android:layout_width="0.0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:text="通道1停止录像" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp">
+
+
+        <Button
+            android:id="@+id/btn_get_mirror_flip"
+            android:layout_width="0.0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:text="获取镜像和翻转" />
+
+        <Button
+            android:id="@+id/btn_set_mirror"
+            android:layout_width="0.0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:text="设置镜像" />
+
+        <Button
+            android:id="@+id/btn_set_flip"
+            android:layout_width="0.0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:text="设置翻转" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp">
+
+
+        <Button
+            android:id="@+id/btn_get_motion_detect_config"
+            android:layout_width="0.0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:text="获取移动侦测" />
+
+        <Button
+            android:id="@+id/btn_set_motion_detect_config"
+            android:layout_width="0.0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:text="设置移动侦测" />
+
+        <Button
+            android:id="@+id/btn_reboot_device"
+            android:layout_width="0.0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:text="重启设备" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp">
+
+
+        <Button
+            android:id="@+id/btn_get_disk_info"
+            android:layout_width="0.0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:text="获取硬盘信息" />
+
+        <Button
+            android:id="@+id/btn_get_stroge_config"
+            android:layout_width="0.0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:text="获取硬盘配置" />
+
+        <Button
+            android:id="@+id/btn_set_stroge_config"
+            android:layout_width="0.0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:text="设置硬盘配置" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp">
+        <Button
+            android:id="@+id/btn_format_hard_disk"
+            android:layout_width="0.0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:text="格式化硬盘" />
+        <Button
+            android:id="@+id/btn_goto_playback"
+            android:layout_width="0.0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:text="硬盘回放" />
+
+
+    </LinearLayout>
+</LinearLayout>

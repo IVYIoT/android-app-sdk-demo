@@ -1,6 +1,8 @@
 package com.ivyiot.appsdk;
 
 import android.app.Application;
+import android.os.Build;
+import android.os.Environment;
 import android.util.Log;
 
 import com.ivyio.sdk.LogLevel;
@@ -33,9 +35,15 @@ public class IvyApplication extends Application {
         super.onCreate();
         instance = this;
         cache = new HashMap<>();
-        SDKManager.getInstance().initIvySDKLog("", LogLevel.NO);//在init之前调用
-        SDKManager.getInstance().initIvyAppLog("", false);//在init之前调用
-        SDKManager.getInstance().init(instance);
+        String imagePath = "";
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+            imagePath = getExternalFilesDir(null).getPath() + "/123.log";//沙盒路徑
+        } else {
+            imagePath = Environment.getExternalStorageDirectory() + "/123.log";
+        }
+        SDKManager.getInstance().initIvySDKLog("", LogLevel.ALL);//在init之前调用
+        SDKManager.getInstance().initIvyAppLog(imagePath,  true);//在init之前调用
+        SDKManager.getInstance().init(this);
 
         String sdkVersion = SDKManager.getInstance().getSdkVersion();
         Log.e(TAG, "sdk version:" + sdkVersion);

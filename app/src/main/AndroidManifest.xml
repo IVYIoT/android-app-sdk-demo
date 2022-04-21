@@ -31,15 +31,37 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
     </activity>
-    <activity
-        android:name=".LiveVideoActivity"
-        android:configChanges="orientation|keyboardHidden|screenSize|locale|layoutDirection"
-        android:launchMode="singleTask" />
-    <activity
-        android:name=".PlaybackActivity"
-        android:configChanges="orientation|keyboardHidden|screenSize|locale|layoutDirection"
-        android:launchMode="singleTask" />
+        <activity
+            android:name=".LiveVideoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|locale|layoutDirection"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".NVRLiveVideoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|locale|layoutDirection"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ResumeLiveVideoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|locale|layoutDirection"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".PlaybackActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|locale|layoutDirection"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".NVRPlaybackActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|locale|layoutDirection"
+            android:launchMode="singleTask" />
 
-    <activity android:name=".SoundWaveAddActivity"/>
+        <activity android:name=".SoundWaveAddActivity"/>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.ivyiot.appsdk.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_path" />
+        </provider>
     </application>
 </manifest>

@@ -6,34 +6,41 @@ import android.os.Message;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.ivyiot.appsdk.adapter.PlaybackListAdapter;
 import com.ivyiot.ipclibrary.model.IvyCamera;
 import com.ivyiot.ipclibrary.model.PlaybackRecordInfo;
-import com.ivyiot.ipclibrary.model.PlaybackRecordListInfoArgsType1;
 import com.ivyiot.ipclibrary.sdk.ISdkCallback;
 import com.ivyiot.ipclibrary.video.IPBVideoListener;
 import com.ivyiot.ipclibrary.video.PBVideoSurfaceView;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-public class PlaybackActivity extends AppCompatActivity implements Observer,View.OnClickListener,IPBVideoListener {
-    private final String TAG = "MainActivity";
+public class PlaybackActivity extends AppCompatActivity implements Observer, View.OnClickListener, IPBVideoListener {
+    private final String TAG = "PlaybackActivity";
     private PBVideoSurfaceView pbvideoview;
     private IvyCamera camera;
 
     /** 回放列表 */
     private ArrayList<String> recordArr;
     /** 回放列表 */
-    private ArrayList<PlaybackRecordInfo> recordIvyArr;
+    private List<PlaybackRecordInfo> recordIvyArr;
 
     private TextView tv_playback_buffer;
+
+    private ListView lv_sd_playback_list;
 
 
     @Override
@@ -55,16 +62,54 @@ public class PlaybackActivity extends AppCompatActivity implements Observer,View
         findViewById(R.id.btn_pb_seek).setOnClickListener(this);
         findViewById(R.id.btn_pb_audio_open).setOnClickListener(this);
         findViewById(R.id.btn_pb_audio_close).setOnClickListener(this);
-        findViewById(R.id.btn_pb_download).setOnClickListener(this);
-
-
+        findViewById(R.id.btn_pb_video_download).setOnClickListener(this);
+        findViewById(R.id.btn_pb_video_download_cancel).setOnClickListener(this);
+        lv_sd_playback_list = findViewById(R.id.lv_sd_playback_list);
 
         tv_playback_buffer = findViewById(R.id.tv_playback_buffer);
         camera.addObserver(PlaybackActivity.this);
+        //注意：Calendar类的月份从0开始。
+        Calendar cal = Calendar.getInstance();
+        //2019.9.23 00:00:00
+        cal.set(2022, 0, 5, 0, 0, 0);
+        int todayStart = (int) (cal.getTimeInMillis() / 1000);
+        //2019.9.23 23:59:59
+        cal.set(2022, 0, 5, 23, 59, 59);
+        int todayEnd = (int) (cal.getTimeInMillis() / 1000);
+        camera.getPBList(todayStart, todayEnd, 1, new ISdkCallback<ArrayList<PlaybackRecordInfo>>() {
+
+            @Override
+            public void onSuccess(ArrayList<PlaybackRecordInfo> result) {
+                recordIvyArr = result;
+                Log.e(TAG, "onSuccess: " + recordIvyArr.size());
+                Toast.makeText(PlaybackActivity.this, "get play back list success. size=" + recordIvyArr.size(), Toast.LENGTH_SHORT).show();
+                //pbvideoview.openPBVideo(camera, recordIvyArr.get(playLocation), PlaybackActivity.this);
+//                playLocation += 1;
+                if(null != lv_sd_playback_list){
+                    lv_sd_playback_list.setAdapter(new PlaybackListAdapter(PlaybackActivity.this, recordIvyArr));
+                }
+            }
+
+            @Override
+            public void onError(int errorCode) {
+                Log.e(TAG, "onError: " + errorCode);
+            }
+
+            @Override
+            public void onLoginError(int errorCode) {
+            }
+        });
+        lv_sd_playback_list.setOnItemClickListener((parent, view, position, id) -> {
+            pbvideoview.closePBVideo();
+            pbvideoview.openPBVideo(camera, recordIvyArr.get(position), PlaybackActivity.this);
+
+        });
+
     }
 
 
     int seekPosition = 60;
+    int playLocation = 1;
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -76,17 +121,17 @@ public class PlaybackActivity extends AppCompatActivity implements Observer,View
                 //注意：Calendar类的月份从0开始。
                 Calendar cal = Calendar.getInstance();
                 //2019.9.23 00:00:00
-                cal.set(2021, 6, 21, 0, 0, 0);
+                cal.set(2021, 5, 5, 0, 0, 0);
                 int todayStart = (int) (cal.getTimeInMillis() / 1000);
                 //2019.9.23 23:59:59
-                cal.set(2021, 6, 21, 23, 59, 59);
+                cal.set(2021, 5, 5, 23, 59, 59);
                 int todayEnd = (int) (cal.getTimeInMillis() / 1000);
-                camera.getPBList(todayStart, todayEnd, 2, new ISdkCallback<ArrayList<PlaybackRecordInfo>>() {
+                camera.getPBList(todayStart, todayEnd, 2,  new ISdkCallback<ArrayList<PlaybackRecordInfo>>() {
                     @Override
                     public void onSuccess(ArrayList<PlaybackRecordInfo> result) {
                         recordIvyArr = result;
-                        Log.e(TAG, "onSuccess: " + result.size());
-                        Toast.makeText(PlaybackActivity.this, "get play back list success. size=" + result.size(), Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "onSuccess: " + recordIvyArr.size());
+                        Toast.makeText(PlaybackActivity.this, "get play back list success. size=" + recordIvyArr.size(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -102,7 +147,10 @@ public class PlaybackActivity extends AppCompatActivity implements Observer,View
             case R.id.btn_pbvideo:
                 pbvideoview.setVisibility(View.VISIBLE);
                 if (recordIvyArr != null && recordIvyArr.size() > 0) {
-                    pbvideoview.openPBVideo(camera, recordIvyArr.get(1), PlaybackActivity.this);
+                    seekPosition = 2;
+                    pbvideoview.closePBVideo();
+                    pbvideoview.openPBVideo(camera, recordIvyArr.get(playLocation), PlaybackActivity.this);
+                    playLocation += 1;
                 }
                 break;
             case R.id.btn_pb_pause:
@@ -121,20 +169,48 @@ public class PlaybackActivity extends AppCompatActivity implements Observer,View
             case R.id.btn_pb_audio_close:
                 pbvideoview.closePBAudio();
                 break;
-            case R.id.btn_pb_download:
-                camera.downloadSDCardRecord(recordIvyArr.get(1), Environment.getExternalStorageDirectory() + "/456.MP4", new ISdkCallback() {
+            case R.id.btn_pb_video_download:
+                pbvideoview.closePBVideo();
+                String path = Environment.getExternalStorageDirectory() + "/123456.mp4";
+                File imgFile = new File(path);
+                if(!imgFile.exists()){
+                    try {
+                        imgFile.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                camera.downloadSDCardRecord(recordIvyArr.get(playLocation), path, new ISdkCallback() {
                     @Override
-                    public void onSuccess(Object o) {
+                    public void onSuccess(Object result) {
 
                     }
 
                     @Override
-                    public void onError(int i) {
+                    public void onError(int errorCode) {
 
                     }
 
                     @Override
-                    public void onLoginError(int i) {
+                    public void onLoginError(int errorCode) {
+
+                    }
+                });
+                break;
+            case R.id.btn_pb_video_download_cancel:
+                camera.cancelSDCardDownload(new ISdkCallback() {
+                    @Override
+                    public void onSuccess(Object result) {
+
+                    }
+
+                    @Override
+                    public void onError(int errorCode) {
+
+                    }
+
+                    @Override
+                    public void onLoginError(int errorCode) {
 
                     }
                 });
@@ -208,16 +284,22 @@ public class PlaybackActivity extends AppCompatActivity implements Observer,View
 
     @Override
     public void onPlaying(int progress) {//正在播放
+        Log.d(TAG, "onPlaying:  " + progress );
+        tv_playback_buffer.setText("当前播放进度："+ progress
+                + " 当前比例：" +pbvideoview.getSleepTime()
+                + " 当前已播放的帧数：" + pbvideoview.getCurrentFrame()
+                + " 当前总帧数：" + pbvideoview.getLonTotalFrameCount());
     }
 
     @Override
     public void onPlayComplete() {
+        Log.d(TAG, " seek--:  onPlayComplete"  );
 
     }
 
     @Override
     public void onPlayFail() {
-
+        Log.e(TAG, "onPlayFail: ");
     }
 
     @Override
@@ -228,12 +310,11 @@ public class PlaybackActivity extends AppCompatActivity implements Observer,View
                 return true;
         }
         return super.onOptionsItemSelected(item);
-
     }
 
     @Override
     protected void onStop() {
-        //pbvideoview.closePBVideo();
+        pbvideoview.closePBVideo();
         super.onStop();
     }
 

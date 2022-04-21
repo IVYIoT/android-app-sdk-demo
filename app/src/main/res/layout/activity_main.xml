@@ -5,24 +5,69 @@
     android:background="@color/other_bg">
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0.0dip"
+        android:layout_weight="1"
+        android:layout_marginTop="@dimen/gap_row"
+        android:orientation="vertical">
+        <TextView
+            android:paddingLeft="@dimen/side_left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="IPC"/>
+        <View
+            android:layout_marginTop="@dimen/side_top"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/splite_line" />
 
-    <View
-        android:layout_marginTop="@dimen/side_top"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/splite_line" />
+        <ListView
+            android:id="@+id/lv_device_search_ipc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@color/splite_line"
+            android:dividerHeight="1px" >
+        </ListView>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/splite_line" />
+    </LinearLayout>
 
-    <ListView
-        android:id="@+id/lv_device_search"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@color/splite_line"
-        android:dividerHeight="1px" >
-    </ListView>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/splite_line" />
+        android:layout_height="0.0dip"
+        android:layout_weight="1"
+        android:layout_marginTop="@dimen/gap_row"
+        android:orientation="vertical">
+        <TextView
+            android:paddingLeft="@dimen/side_left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="NVR"/>
+        <View
+            android:layout_marginTop="@dimen/side_top"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/splite_line" />
+
+        <ListView
+            android:id="@+id/lv_device_search_nvr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@color/splite_line"
+            android:dividerHeight="1px" >
+        </ListView>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/splite_line" />
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/btn_refresh"

@@ -124,7 +124,7 @@
                 android:layout_marginTop="3dp">
 
                 <Button
-                    android:id="@+id/btn_pb_download"
+                    android:id="@+id/btn_pb_video_download"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="3dp"
@@ -132,7 +132,17 @@
                     android:layout_marginEnd="3dp"
                     android:layout_marginRight="3dp"
                     android:layout_weight="1"
-                    android:text="录像下载" />
+                    android:text="下载录像" />
+                <Button
+                    android:id="@+id/btn_pb_video_download_cancel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginEnd="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="1"
+                    android:text="取消下载录像" />
 
 
             </LinearLayout>
@@ -148,4 +158,11 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <ListView
+        android:id="@+id/lv_sd_playback_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
 </LinearLayout>

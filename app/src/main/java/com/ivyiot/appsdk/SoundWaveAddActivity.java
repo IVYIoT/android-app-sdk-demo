@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.ivyiot.appsdk.adapter.DeviceSearchAdapter;
 import com.ivyiot.ipclibrary.model.DiscoveryDev;
 import com.ivyiot.ipclibrary.sdk.SDKManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,7 +76,7 @@ public class SoundWaveAddActivity extends AppCompatActivity implements View.OnCl
             case R.id.btn_play_sound_wave:
                 if(!TextUtils.isEmpty(wifi_ssid)){
                     SDKManager.getInstance().startSoundWaveAdd(uid, wifi_ssid, wifi_password, 1);
-                    mainThread.post(searchWlanDeviceRunable);
+                    mainThread.post(searchWlanDeviceRunnable);
                 }
                 break;
         }
@@ -89,7 +90,7 @@ public class SoundWaveAddActivity extends AppCompatActivity implements View.OnCl
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mainThread.removeCallbacks(searchWlanDeviceRunable);
+        mainThread.removeCallbacks(searchWlanDeviceRunnable);
 
     }
 
@@ -115,7 +116,7 @@ public class SoundWaveAddActivity extends AppCompatActivity implements View.OnCl
     }
 
 
-    Runnable searchWlanDeviceRunable = new Runnable() {
+    Runnable searchWlanDeviceRunnable = new Runnable() {
         @Override
         public void run() {
             searchIvyCameraInWLAN();

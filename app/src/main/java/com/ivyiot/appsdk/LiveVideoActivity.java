@@ -4,7 +4,9 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Message;
 import android.util.Log;
 import android.view.MenuItem;
@@ -16,12 +18,11 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ivyio.sdk.PictureFile;
-import com.ivyio.sdk.PictureInfo;
 import com.ivyio.sdk.PictureList;
-import com.ivyio.sdk.PictureListType0;
 import com.ivyiot.ipclibrary.audio.AudioThread;
 import com.ivyiot.ipclibrary.audio.TalkThread;
 import com.ivyiot.ipclibrary.common.Global;
+import com.ivyiot.ipclibrary.event.EventID;
 import com.ivyiot.ipclibrary.model.DevAbility;
 import com.ivyiot.ipclibrary.model.DevAudioDetect;
 import com.ivyiot.ipclibrary.model.DevInfo;
@@ -56,8 +57,8 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
     /**
      * 默认用户名密码
      */
-    private static final String DEFAULT_USER_NAME = "1";
-    private static final String DEFAULT_PASSWORD = "foscam1";
+    private static final String DEFAULT_USER_NAME = "cloud888";
+    private static final String DEFAULT_PASSWORD = "wang123";
     /**
      * 音频播放类
      */
@@ -112,11 +113,11 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
         DiscoveryDev dev = (DiscoveryDev) intent.getSerializableExtra("ivyDevice");
         if (null != dev) {
             camera = new IvyCamera();
-            camera.uid = dev.uid;
+            camera.uid = "75E74XTE45RJ8537AI6E5YBM";//dev.uid;
             camera.usrName = DEFAULT_USER_NAME;
-            camera.password = DEFAULT_PASSWORD;//SDKManager.getInstance().getUnfeelingPassword(dev.uid);
+            camera.password = DEFAULT_PASSWORD;//SDKManager.getInstance().getUnfeelingPassword(camera.uid);
+            videoview = findViewById(R.id.videoView);
         }
-        videoview = findViewById(R.id.videoview);
         findViewById(R.id.btn_conn).setOnClickListener(this);
         findViewById(R.id.btn_live).setOnClickListener(this);
         findViewById(R.id.btn_snap).setOnClickListener(this);
@@ -176,6 +177,57 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
 
         findViewById(R.id.btn_get_picture_list).setOnClickListener(this);
         findViewById(R.id.btn_picture_download).setOnClickListener(this);
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        //videoview.openVideo(camera);
+        super.onResume();
+        // 订阅 ipc 的事件消息
+        camera.addObserver(LiveVideoActivity.this);
+
+        // 向 ipc 发送命令，获取或者设置ipc信息。
+        camera.getDevInfo(new ISdkCallback<DevInfo>() {
+            @Override
+            public void onSuccess(DevInfo result) {
+                Log.e(TAG, "getDevInfo onSuccess. uid= " + result.uid + " ,mac= " + result.mac);
+                devInfo = result;
+                Toast.makeText(LiveVideoActivity.this, "getDevInfo success. ipc name=" + result.devName, Toast.LENGTH_SHORT).show();
+                videoview.setVisibility(View.VISIBLE);
+                //打开视频，命令结果通过回调方法接收，见 IVideoListener
+                //videoview.openVideo(camera, LiveVideoActivity.this);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+                Log.e(TAG, "getDevInfo onError:" + errorCode);
+            }
+
+            @Override
+            public void onLoginError(int errorCode) {
+                Log.e(TAG, "getDevInfo onLoginError:" + errorCode);
+//                        if(15 == errorCode){
+//                            camera.modifyUsrNameAndPwd("fos", "abc123", new ISdkCallback() {
+//                                @Override
+//                                public void onSuccess(Object result) {
+//
+//                                }
+//
+//                                @Override
+//                                public void onError(int errorCode) {
+//
+//                                }
+//
+//                                @Override
+//                                public void onLoginError(int errorCode) {
+//
+//                                }
+//                            });
+//                        }
+            }
+        });
     }
 
     @Override
@@ -183,6 +235,11 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
         if (arg != null) {
             Message msg = (Message) arg;
             Log.e(TAG, "update: " + msg.what + ";data=" + msg.obj);
+            switch (msg.what) {
+                case EventID.IVY_CTRL_MSG_VIDEO_STREAM_MODE:
+                    int hdsdValue = (int) msg.obj;
+                    break;
+            }
         }
     }
 
@@ -191,19 +248,20 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
      */
     private DevAudioDetect devAudioDetect;
 
+    private DevMotionDetect devMotionDetect;
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_conn://连接
                 // 连接ipc
-                Global.es.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        int result = camera.login();
-                        Log.e(TAG, "login: " + result);
-                        getDoorSensorInfo();
-                    }
-                });
+//                Global.es.execute(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        int result = camera.login();
+//                        Log.e(TAG, "login: " + result);
+//                    }
+//                });
 
                 // 订阅 ipc 的事件消息
                 camera.addObserver(LiveVideoActivity.this);
@@ -215,6 +273,7 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
                         Log.e(TAG, "getDevInfo onSuccess. uid= " + result.uid + " ,mac= " + result.mac);
                         devInfo = result;
                         Toast.makeText(LiveVideoActivity.this, "getDevInfo success. ipc name=" + result.devName, Toast.LENGTH_SHORT).show();
+                        getDoorSensorInfo();
                     }
 
                     @Override
@@ -225,40 +284,79 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
                     @Override
                     public void onLoginError(int errorCode) {
                         Log.e(TAG, "getDevInfo onLoginError:" + errorCode);
+//                        if(15 == errorCode){
+//                            camera.modifyUsrNameAndPwd("fos", "abc123", new ISdkCallback() {
+//                                @Override
+//                                public void onSuccess(Object result) {
+//
+//                                }
+//
+//                                @Override
+//                                public void onError(int errorCode) {
+//
+//                                }
+//
+//                                @Override
+//                                public void onLoginError(int errorCode) {
+//
+//                                }
+//                            });
+//                        }
                     }
                 });
                 break;
             case R.id.btn_live://直播
                 videoview.setVisibility(View.VISIBLE);
-                //打开视频，命令结果通过回调方法接收，见 IVideoListener
-                videoview.openVideo(camera, this);
-                break;
-            case R.id.btn_snap:
-                //抓拍
-                videoview.snap(true, "", new ISdkCallback() {
+                camera.loginDevice(new ISdkCallback() {
                     @Override
-                    public void onSuccess(Object o) {
-                        Log.e(TAG, "onClick: snap" );
+                    public void onSuccess(Object result) {
+                        //打开视频，命令结果通过回调方法接收，见 IVideoListener
+                        videoview.openVideo(camera, LiveVideoActivity.this);
                     }
 
                     @Override
-                    public void onError(int i) {
+                    public void onError(int errorCode) {
 
                     }
 
                     @Override
-                    public void onLoginError(int i) {
+                    public void onLoginError(int errorCode) {
 
                     }
                 });
 
+                break;
+            case R.id.btn_snap:
+                String imgePath = "";
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+                    imgePath = getExternalFilesDir(null).getPath() + "123.jpg";//沙盒路徑
+                } else {
+                    imgePath = Environment.getExternalStorageDirectory() + "123.jpg";
+                }
+                //抓拍
+                videoview.snap(true, imgePath, new ISdkCallback() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        Toast.makeText(LiveVideoActivity.this, "snap success!!!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(int errorCode) {
+
+                    }
+
+                    @Override
+                    public void onLoginError(int errorCode) {
+
+                    }
+                });
                 break;
             case R.id.btn_open_audio://打开监听
                 camera.openAudio(new ISdkCallback() {
                     @Override
                     public void onSuccess(Object result) {
                         if (null == audioThread) {
-                            audioThread = new AudioThread(camera,true);
+                            audioThread = new AudioThread(camera, false);
                             audioThread.startAudio();
                             audioThread.start();
                         }
@@ -287,12 +385,10 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
 
                     @Override
                     public void onError(int errorCode) {
-
                     }
 
                     @Override
                     public void onLoginError(int errorCode) {
-
                     }
                 });
                 break;
@@ -302,10 +398,9 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
                         @Override
                         public void onSuccess(Object result) {
                             if (null == talkThread) {
-                                talkThread = new TalkThread(camera, true);
+                                talkThread = new TalkThread(camera, false);
                                 talkThread.startTalk();
                                 talkThread.start();
-
                             }
                         }
 
@@ -343,38 +438,33 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
                 });
                 break;
             case R.id.btn_get_device_info://获取设备信息
-                if (null == devInfo) {
-                    // 向 ipc 发送命令，获取或者设置ipc信息。
-                    camera.getDevInfo(new ISdkCallback<DevInfo>() {
-                        @Override
-                        public void onSuccess(DevInfo result) {
-                            Log.e(TAG, "getDevInfo onSuccess. uid= " + result.uid + " ,mac= " + result.mac);
-                            devInfo = result;
-                            Toast.makeText(LiveVideoActivity.this, "getDevInfo success. ipc name=" + result.devName, Toast.LENGTH_SHORT).show();
+                // 向 ipc 发送命令，获取或者设置ipc信息。
+                camera.getDevInfo(new ISdkCallback<DevInfo>() {
+                    @Override
+                    public void onSuccess(DevInfo result) {
+                        Log.e(TAG, "getDevInfo onSuccess. uid= " + result.uid + " ,mac= " + result.mac);
+                        devInfo = result;
+                        Toast.makeText(LiveVideoActivity.this, "getDevInfo success. ipc name=" + result.devName, Toast.LENGTH_SHORT).show();
+                    }
 
-                        }
+                    @Override
+                    public void onError(int errorCode) {
+                        Log.e(TAG, "getDevInfo onError:" + errorCode);
+                    }
 
-                        @Override
-                        public void onError(int errorCode) {
-                            Log.e(TAG, "getDevInfo onError:" + errorCode);
-                        }
-
-                        @Override
-                        public void onLoginError(int errorCode) {
-                            Log.e(TAG, "getDevInfo onLoginError:" + errorCode);
-                        }
-                    });
-                } else {
-                    Toast.makeText(LiveVideoActivity.this, "getDevInfo success. ipc name=" + devInfo.devName, Toast.LENGTH_SHORT).show();
-                }
+                    @Override
+                    public void onLoginError(int errorCode) {
+                        Log.e(TAG, "getDevInfo onLoginError:" + errorCode);
+                    }
+                });
                 break;
             case R.id.btn_get_device_ability://获取能力集
                 // 向 ipc 发送命令，获取或者设置ipc信息。
                 camera.getDevAbility(new ISdkCallback<DevAbility>() {
                     @Override
                     public void onSuccess(DevAbility result) {
-                        Log.e(TAG, "getDevAbility onSuccess.  ");
                         devAbility = result;
+                        Log.e(TAG, "getDevAbility onSuccess.  " + devAbility.toString());
                         Toast.makeText(LiveVideoActivity.this, "getDevAbility success. ipc name=" + devAbility.toString(), Toast.LENGTH_SHORT).show();
                     }
 
@@ -420,19 +510,22 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
                     //camera.changeDefinition(definitionItem.getResolution(definitionItem.getCurrRules()[0]), null);
                     camera.changeDefinition(0, null);
                 }
-
                 break;
             case R.id.btn_ptz_up:
-                camera.ptzControl(PTZCmd.PTZ_MOVE_UP, null);
+                //camera.ptzControl(PTZCmd.PTZ_MOVE_UP, null);
+                camera.setFlip(1, null);
                 break;
             case R.id.btn_ptz_down:
-                camera.ptzControl(PTZCmd.PTZ_MOVE_DOWN, null);
+                camera.setFlip(0, null);
+                //camera.ptzControl(PTZCmd.PTZ_MOVE_DOWN, null);
                 break;
             case R.id.btn_ptz_left:
-                camera.ptzControl(PTZCmd.PTZ_STOP, null);
+                //camera.ptzControl(PTZCmd.PTZ_STOP, null);
+                camera.setMirror(1, null);
                 break;
             case R.id.btn_ptz_right:
-                camera.ptzControl(PTZCmd.PTZ_MOVE_RIGHT, null);
+                //camera.ptzControl(PTZCmd.PTZ_MOVE_RIGHT, null);
+                camera.setMirror(0, null);
                 break;
             case R.id.btn_preset_get:
                 camera.getPTZPresetList(new ISdkCallback<ResetPointList>() {
@@ -453,10 +546,40 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
                 });
                 break;
             case R.id.btn_preset_execute:
-                camera.goToPTZPresetPoint("TopMost", null);
+                camera.goToPTZPresetPoint("TopMost", new ISdkCallback() {
+                    @Override
+                    public void onSuccess(Object result) {
+
+                    }
+
+                    @Override
+                    public void onError(int errorCode) {
+
+                    }
+
+                    @Override
+                    public void onLoginError(int errorCode) {
+
+                    }
+                });
                 break;
             case R.id.btn_preset_add:
-                camera.addPTZPreset("test1", null);
+                camera.addPTZPreset("test1", new ISdkCallback() {
+                    @Override
+                    public void onSuccess(Object result) {
+
+                    }
+
+                    @Override
+                    public void onError(int errorCode) {
+
+                    }
+
+                    @Override
+                    public void onLoginError(int errorCode) {
+
+                    }
+                });
                 break;
             case R.id.btn_preset_delete:
                 camera.deletePTZPreset("test1", new ISdkCallback<ResetPointList>() {
@@ -498,10 +621,10 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
                 camera.setInfraredLed(EInfraLedMode.SCHEDULE.ordinal(), 1, null);
                 break;
             case R.id.btn_get_ipc_volume:
-                camera.getAudioVolume(null);
+                camera.getSpeakVolume(null);
                 break;
             case R.id.btn_set_ipc_volume:
-                camera.setAudioVolume(50, null);
+                camera.setSpeakVolume(50, null);
                 break;
             case R.id.btn_get_sound_detect:
                 camera.getAudioDetectConfig(new ISdkCallback<DevAudioDetect>() {
@@ -590,7 +713,7 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
                 camera.getMotionDetectConfig(new ISdkCallback<DevMotionDetect>() {
                     @Override
                     public void onSuccess(DevMotionDetect result) {
-
+                        devMotionDetect = result;
                     }
 
                     @Override
@@ -605,6 +728,9 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
                 });
                 break;
             case R.id.btn_get_sdcard_info:
+                if (null != devMotionDetect) {
+                    camera.setMotionDetectConfig(devMotionDetect, null);
+                }
                 camera.getSDInfo(new ISdkCallback<DevSDInfo>() {
                     @Override
                     public void onSuccess(DevSDInfo result) {
@@ -628,7 +754,7 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
                     Toast.makeText(LiveVideoActivity.this, "先获取设备能1111力集!!!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (ECameraPlatform.Amba != CommonUtil.getCameraPlatform(devAbility)){//安霸平台
+                if (ECameraPlatform.Amba != CommonUtil.getCameraPlatform(devAbility)) {//安霸平台
                     Toast.makeText(LiveVideoActivity.this, "设备不支持", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -707,7 +833,24 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
 
                 break;
             case R.id.btn_wdr:
-                camera.setWDRMode(true, new ISdkCallback() {
+//                camera.setWDRMode(true, new ISdkCallback() {
+//                    @Override
+//                    public void onSuccess(Object result) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(int errorCode) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onLoginError(int errorCode) {
+//
+//                    }
+//                });
+
+                camera.updateDeviceName("yhj", new ISdkCallback() {
                     @Override
                     public void onSuccess(Object result) {
 
@@ -723,21 +866,19 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
 
                     }
                 });
-
                 break;
             case R.id.btn_get_picture_list:
                 //注意：Calendar类的月份从0开始。
                 Calendar cal = Calendar.getInstance();
                 //2019.9.23 00:00:00
-                cal.set(2020, 11, 29, 0, 0, 0);
+                cal.set(2021, 10, 14, 0, 0, 0);
                 int todayStart = (int) (cal.getTimeInMillis() / 1000);
                 //2019.9.23 23:59:59
-                cal.set(2020, 11, 29, 23, 59, 59);
+                cal.set(2021, 10, 14, 23, 59, 59);
                 int todayEnd = (int) (cal.getTimeInMillis() / 1000);
                 camera.getPictureList(todayStart, todayEnd, 511, 0, new ISdkCallback<PictureList>() {
-
                     @Override
-                    public void onSuccess(PictureList pictureList) {
+                    public void onSuccess(PictureList result) {
 
                     }
 
@@ -754,12 +895,64 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
                 break;
             case R.id.btn_picture_download:
                 PictureDetail pictureInfo = new PictureDetail();
-                pictureInfo.format = 0;
-                pictureInfo.time = 0;
-                pictureInfo.type = 0;
+                pictureInfo.format = 200;
+                pictureInfo.time = 1630308602;
+                pictureInfo.type = 1;
+                pictureInfo.direction = 1;
+                pictureInfo.weight = 1028;
                 camera.downloadPictureFile(pictureInfo, new ISdkCallback<PictureFile>() {
                     @Override
                     public void onSuccess(PictureFile result) {
+
+                    }
+
+                    @Override
+                    public void onError(int errorCode) {
+
+                    }
+
+                    @Override
+                    public void onLoginError(int errorCode) {
+
+                    }
+                });
+//                camera.setCloudRecord("682cf1b1f1a24f68b52f5f21f2f01824", "8047dd522762fa846c91bc908e10c85923447700626EEDFEC4",
+//                        "https://test-api.myfoscam.cn", 443, "00626EEDFEC4", new ISdkCallback() {
+//                    @Override
+//                    public void onSuccess(Object result) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(int errorCode) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onLoginError(int errorCode) {
+//
+//                    }
+//                });
+//                syncTime();
+                camera.startRecord("", new ISdkCallback() {
+                    @Override
+                    public void onSuccess(Object result) {
+
+                    }
+
+                    @Override
+                    public void onError(int errorCode) {
+
+                    }
+
+                    @Override
+                    public void onLoginError(int errorCode) {
+
+                    }
+                });
+                camera.stopRecord(new ISdkCallback() {
+                    @Override
+                    public void onSuccess(Object result) {
 
                     }
 
@@ -777,8 +970,6 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
 
         }
     }
-
-
 
 
     //将手机时间同步到IPC
@@ -843,8 +1034,8 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
     }
 
     @Override
-    public void netFlowSpeedRefresh(String s) {
-        
+    public void netFlowSpeedRefresh(String speedValue) {
+        Log.e(TAG, "netFlowSpeedRefresh: " + speedValue);
     }
 
 
@@ -882,15 +1073,21 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
+
         if (null != videoview) {
             videoview.closeVideo();
         }
-        if(null != camera){
+        if (null != camera) {
             camera.deleteObserver(this);
         }
-
     }
 
     /**
@@ -923,6 +1120,7 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        camera.destroy();
+        //camera.destroy();
     }
+
 }
