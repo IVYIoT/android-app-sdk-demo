@@ -1,6 +1,7 @@
 package com.ivyiot.appsdk;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -352,7 +353,7 @@ public class NVRLiveVideoActivity extends AppCompatActivity implements Observer,
                 });
                 break;
             case R.id.btn_get_stroge_config:
-                nvr.getStrogeConfig(new ISdkCallback() {
+                nvr.getStorageConfig(new ISdkCallback() {
                     @Override
                     public void onSuccess(Object result) {
                         strogeConfigModel = (StrogeConfigModel) result;
@@ -373,7 +374,7 @@ public class NVRLiveVideoActivity extends AppCompatActivity implements Observer,
                 if(null == strogeConfigModel){
                     return;
                 }
-                nvr.setStrogeConfig(strogeConfigModel, new ISdkCallback() {
+                nvr.setStorageConfig(strogeConfigModel, new ISdkCallback() {
                     @Override
                     public void onSuccess(Object result) {
                     }
@@ -480,6 +481,16 @@ public class NVRLiveVideoActivity extends AppCompatActivity implements Observer,
 
     @Override
     public void closeVideoFail(int errorCode) {
+
+    }
+
+    @Override
+    public void netFlowSpeedRefresh(String s) {
+
+    }
+
+    @Override
+    public void firstFrameDone(Bitmap bitmap) {
 
     }
 
