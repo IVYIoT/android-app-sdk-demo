@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         lv_device_search_ipc = findViewById(R.id.lv_device_search_ipc);
         lv_device_search_nvr = findViewById(R.id.lv_device_search_nvr);
         findViewById(R.id.btn_refresh).setOnClickListener(this);
-        Toast.makeText(this, "The version code is " + LibraryInfo.VersionCode, Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "The version code is " + LibraryInfo.VersionCode, Toast.LENGTH_LONG).show();
         searchIvyCameraInWLAN();
         findViewById(R.id.btn_audio_wave_add).setOnClickListener(this);
         lv_device_search_ipc.setOnItemClickListener((parent, view, position, id) -> {

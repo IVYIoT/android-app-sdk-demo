@@ -358,7 +358,6 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
                         if (null == audioThread) {
                             audioThread = new AudioThread(camera, false);
                             audioThread.startAudio();
-                            audioThread.start();
                         }
                     }
 
@@ -400,7 +399,6 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
                             if (null == talkThread) {
                                 talkThread = new TalkThread(camera, false);
                                 talkThread.startTalk();
-                                talkThread.start();
                             }
                         }
 
@@ -1049,8 +1047,6 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
                         if (null == talkThread) {
                             talkThread = new TalkThread(camera, true);
                             talkThread.startTalk();
-                            talkThread.start();
-
                         }
                     }
 

@@ -240,7 +240,6 @@ public class ResumeLiveVideoActivity extends AppCompatActivity implements Observ
                         if (null == talkThread) {
                             talkThread = new TalkThread(camera, true);
                             talkThread.startTalk();
-                            talkThread.start();
 
                         }
                     }

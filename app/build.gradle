@@ -37,5 +37,5 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation(name: 'ipclibrary-2022_08_09', ext: 'aar')
+    implementation(name: 'ipclibrary-2023_07_20', ext: 'aar')
 }
