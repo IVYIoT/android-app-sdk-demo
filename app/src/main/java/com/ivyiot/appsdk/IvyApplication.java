@@ -1,5 +1,6 @@
 package com.ivyiot.appsdk;
 
+import android.Manifest;
 import android.app.Application;
 import android.os.Build;
 import android.os.Environment;
@@ -41,8 +42,10 @@ public class IvyApplication extends Application {
         } else {
             imagePath = Environment.getExternalStorageDirectory() + "/123.log";
         }
-        SDKManager.getInstance().initIvySDKLog("", LogLevel.ALL);//在init之前调用
-        SDKManager.getInstance().initIvyAppLog(imagePath,  true);//在init之前调用
+        if(PermissionUtil.chkPermission(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE})){
+            SDKManager.getInstance().initIvySDKLog("", LogLevel.ALL);//在init之前调用
+            SDKManager.getInstance().initIvyAppLog(imagePath,  true);//在init之前调用
+        }
         SDKManager.getInstance().init(this);
 
         String sdkVersion = SDKManager.getInstance().getSdkVersion();

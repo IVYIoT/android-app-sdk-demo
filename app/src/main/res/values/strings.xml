@@ -16,4 +16,11 @@
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
     <string name="title_activity_main3">Main3Activity</string>
+
+
+    <string name="live_connect_device">Connect Device</string>
+
+    <string name="live_open_live">Open Live</string>
+    <string name="live_capture">Snap Capture</string>
+
 </resources>

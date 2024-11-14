@@ -19,8 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ivyio.sdk.PictureFile;
 import com.ivyio.sdk.PictureList;
-import com.ivyiot.ipclibrary.audio.AudioThread;
-import com.ivyiot.ipclibrary.audio.TalkThread;
 import com.ivyiot.ipclibrary.common.Global;
 import com.ivyiot.ipclibrary.event.EventID;
 import com.ivyiot.ipclibrary.model.DevAbility;
@@ -42,7 +40,9 @@ import com.ivyiot.ipclibrary.sdk.ISdkCallback;
 import com.ivyiot.ipclibrary.sdk.SDKResponse;
 import com.ivyiot.ipclibrary.util.CommonUtil;
 import com.ivyiot.ipclibrary.util.PermissionUtil;
+import com.ivyiot.ipclibrary.video.AudioThread;
 import com.ivyiot.ipclibrary.video.IVideoListener;
+import com.ivyiot.ipclibrary.video.TalkThread;
 import com.ivyiot.ipclibrary.video.VideoSurfaceView;
 
 import java.util.Calendar;
@@ -57,8 +57,8 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
     /**
      * 默认用户名密码
      */
-    private static final String DEFAULT_USER_NAME = "cloud888";
-    private static final String DEFAULT_PASSWORD = "wang123";
+    private static final String DEFAULT_USER_NAME = "1";
+    private static final String DEFAULT_PASSWORD = "foscam1";
     /**
      * 音频播放类
      */
@@ -113,7 +113,7 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
         DiscoveryDev dev = (DiscoveryDev) intent.getSerializableExtra("ivyDevice");
         if (null != dev) {
             camera = new IvyCamera();
-            camera.uid = "75E74XTE45RJ8537AI6E5YBM";//dev.uid;
+            camera.uid = dev.uid;
             camera.usrName = DEFAULT_USER_NAME;
             camera.password = DEFAULT_PASSWORD;//SDKManager.getInstance().getUnfeelingPassword(camera.uid);
             videoview = findViewById(R.id.videoView);
@@ -237,7 +237,7 @@ public class LiveVideoActivity extends AppCompatActivity implements Observer, Vi
             Log.e(TAG, "update: " + msg.what + ";data=" + msg.obj);
             switch (msg.what) {
                 case EventID.IVY_CTRL_MSG_VIDEO_STREAM_MODE:
-                    int hdsdValue = (int) msg.obj;
+                    //int hdsdValue = (int) msg.obj;
                     break;
             }
         }

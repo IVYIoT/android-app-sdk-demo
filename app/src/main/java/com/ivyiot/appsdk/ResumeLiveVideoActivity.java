@@ -13,8 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.ivyiot.ipclibrary.audio.AudioThread;
-import com.ivyiot.ipclibrary.audio.TalkThread;
 import com.ivyiot.ipclibrary.common.Global;
 import com.ivyiot.ipclibrary.model.DevAbility;
 import com.ivyiot.ipclibrary.model.DevAudioDetect;
@@ -26,7 +24,9 @@ import com.ivyiot.ipclibrary.model.StreamMode;
 import com.ivyiot.ipclibrary.sdk.CmdHelper;
 import com.ivyiot.ipclibrary.sdk.ISdkCallback;
 import com.ivyiot.ipclibrary.sdk.SDKResponse;
+import com.ivyiot.ipclibrary.video.AudioThread;
 import com.ivyiot.ipclibrary.video.IVideoListener;
+import com.ivyiot.ipclibrary.video.TalkThread;
 import com.ivyiot.ipclibrary.video.VideoSurfaceView;
 
 import java.util.Observable;
