@@ -1,15 +1,16 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
+    ext {
+        agp_version = '8.5.2'
+    }
     repositories {
-        maven{url"https://maven.google.com"}
-        jcenter()
-        maven{url 'https://jitpack.io'}
+        mavenCentral()
+        google()
         
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.4'
-        
+        classpath "com.android.tools.build:gradle:$agp_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -17,10 +18,9 @@ buildscript {
 
 allprojects {
     repositories {
-        maven{url"https://maven.google.com"}
-        jcenter()
-        maven{url 'https://jitpack.io'}
-        
+        mavenCentral()
+        google()
+
     }
 }
 
