@@ -38,6 +38,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation(name: 'ipclibrary_2026_11_16', ext: 'aar')
+    implementation(name: 'ipclibrary_2026_11_18', ext: 'aar')
     implementation(name: 'cloudplaybacklibrary-1.1', ext: 'aar')
 }
